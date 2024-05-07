@@ -32,33 +32,39 @@ const createEstudiante = async (req, res) => {
 
  const deleteEstudiante = async (req, res) => {
     try {
-        const { rut } = req.params
-        const estudiantes = await estudiantesModel.remove(rut)
-        return res.json(estudiantes)
+        const { rut } = req.params;
+        await estudiantesModel.remove(rut); // Eliminar al estudiante
+        return res.json({ message: 'Estudiante eliminado correctamente' });
     } catch (error) {
-        console.log(error)
-        return res.status(500).json({ ok: false })
-        
+        console.log(error);
+        return res.status(500).json({ ok: false });
     }
-}
+};
+
 
 const updateEstudiante = async (req, res) => {
     try {
-        const {nombre, curso, nivel} = req.body
-        const {rut} = req.params
-        const updateEstudiantes = {
+        const { nombre, curso, nivel } = req.body;
+        const { rut } = req.params;
+        
+        // Construir objeto con los datos de actualización
+        const updateEstudiante = {
             nombre,
-            rut,
             curso,
-            nivel
-        }
-        const estu = await estudiantesModel.update(updateEstudiantes)
-        return res.json(estu)
+            nivel,
+            rut // Asegúrate de incluir el rut
+        };
+
+        // Llamar a la función correcta del modelo para actualizar al estudiante
+        const estudianteActualizado = await estudiantesModel.update(updateEstudiante);
+
+        return res.json(estudianteActualizado);
     } catch (error) {
-        console.log(error)
-        return res.status(500).json({ ok: false })
+        console.log(error);
+        return res.status(500).json({ ok: false });
     }
-}
+};
+
 
 export const estudiantesController = {
     getEstudiantes,

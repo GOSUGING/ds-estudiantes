@@ -12,17 +12,27 @@ const create = async (estudiantes) => {
     return rows[0]; // Devolver la primera fila (el estudiante recién insertado)
 };
 
-const update = async(estudiantes) => {
-    const querySQL = 'UPDATE estudiantes SET nombre = $1, curso = $2, nivel = $3 WHERE rut = $4 RETURNING *';
-    const {rows} = await pool.query(querySQL, [estudiantes.nombre, estudiantes.curso, estudiantes.nivel, estudiantes.rut]);
-    return rows;
-}
+const update = async (estudiantes) => {
+    try {
+        const querySQL = 'UPDATE estudiantes SET nombre = $1, curso = $2, nivel = $3 WHERE rut = $4 RETURNING *';
+        const { rows } = await pool.query(querySQL, [estudiantes.nombre, estudiantes.curso, estudiantes.nivel, estudiantes.rut]);
+        return rows;
+    } catch (error) {
+        // Manejar errores aquí si es necesario
+        throw error;
+    }
+};
 
-const remove = async(rut) => {
-    const querySQL = 'DELETE FROM estudiantes WHERE rut = $1 RETURNING *'
-    const { rows } = await pool.query(querySQL, [rut])
-    return rows
-}
+const remove = async (rut) => {
+    try {
+        const querySQL = 'DELETE FROM estudiantes WHERE rut = $1 RETURNING *';
+        await pool.query(querySQL, [rut]);
+        return { message: 'Estudiante eliminado correctamente' };
+    } catch (error) {
+        // Manejar errores aquí si es necesario
+        throw error;
+    }
+};
 
 
 
